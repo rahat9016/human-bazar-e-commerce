@@ -1,30 +1,42 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../action/cart.action";
 import Layout from "../../components/Layout/Layout";
 import Card from "../../components/UI/Card/Card";
+import CartItem from "./CartItem/CartItem";
 import "./style.css";
 const CartPage = () => {
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  const cartItems = cart.cartItems;
+  const [cartItems, setCartItems] = useState(cart.cartItems);
+  useEffect(() => {
+    setCartItems(cart.cartItems);
+  }, [cart.cartItems]);
+  const onQuantityIncrement = (_id, qty) => {
+    const { name, price, img } = cartItems[_id];
+    dispatch(addToCart({ _id, name, price, img }, 1));
+  };
+  const onQuantityDecrement = (_id, qty) => {
+    const { name, price, img } = cartItems[_id];
+    dispatch(addToCart({ _id, name, price, img }, -1));
+  };
   return (
     <Layout>
       <div className="cartContainer">
         <Card headerLeft={`My Cart`} headerRight={`Deliver to`}>
-          {Object.keys(cartItems).map((keys, index) => (
-            <div className="flexRow" key={index}>
-              <div className="cartProductContainer">
-                <img src="" alt="" />
-              </div>
-              <div className="cartItemDetails">
-                <div>
-                  {cartItems[keys].name} - Quantity {cartItems[keys].qty}
-                </div>
-                <div>Delivery in 3 - 5 days</div>
-              </div>
-            </div>
+          {Object.keys(cartItems).map((key, index) => (
+            <CartItem
+              key={index}
+              cartItem={cartItems[key]}
+              onQuantityInc={onQuantityIncrement}
+              onQuantityDec={onQuantityDecrement}
+            />
           ))}
         </Card>
-        <Card style={{ width: "500px" }}>price</Card>
+        <Card
+          style={{ width: "500px", alignItems: "flex-start" }}
+          headerLeft="Price"
+        ></Card>
       </div>
     </Layout>
   );
