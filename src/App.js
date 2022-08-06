@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Route, Routes } from "react-router-dom";
+import { isUserLoggedIn } from "./action";
+import { updateCart } from "./action/cart.action";
+import "./App.css";
+import CartPage from "./containers/CartPage/CartPage";
+import HomePage from "./containers/HomePage/HomePage";
+import ProductDetailsPage from "./containers/ProductDetailsPage/ProductDetailsPage";
+import ProductListPage from "./containers/ProductListPage/ProductListPage";
 
 function App() {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  useEffect(() => {
+    if (!auth.authenticate) {
+      dispatch(isUserLoggedIn());
+    }
+  }, [dispatch, auth.authenticate]);
+  useEffect(() => {
+    dispatch(updateCart());
+  });
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Routes>
+        <Route path="/*" element={<HomePage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/:slug" element={<ProductListPage />} />
+        <Route
+          path="/:productSlug/:productId/p"
+          element={<ProductDetailsPage />}
+        />
+      </Routes>
     </div>
   );
 }
