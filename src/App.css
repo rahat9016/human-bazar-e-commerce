@@ -1,0 +1,9 @@
+.sb {
+  justify-content: space-between;
+}
+.flexRow {
+  display: flex;
+}
+body {
+  background: #f1f3f6;
+}

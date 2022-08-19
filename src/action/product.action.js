@@ -4,7 +4,6 @@ import { productConstants } from "./constance";
 export const getProductBySlug = (slug) => {
   return async (dispatch) => {
     const res = await axios.get(`${api}/products/${slug}`);
-    console.log(res);
     if (res.status === 200) {
       dispatch({
         type: productConstants.GET_PRODUCT_BY_SLUG,
@@ -25,7 +24,6 @@ export const getProductPage = (payload) => {
       });
       const { cid, type } = payload.params;
       const res = await axios.get(`/page/${cid}/${type}`);
-      console.log(res.data);
       if (res.status === 200) {
         const { page } = res.data;
         dispatch({
