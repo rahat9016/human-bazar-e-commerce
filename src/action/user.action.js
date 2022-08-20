@@ -11,7 +11,6 @@ export const getAddress = () => {
         const {
           userAddress: { address },
         } = res.data;
-        console.log(address);
         dispatch({
           type: userConstants.GET_USER_ADDRESS_SUCCESS,
           payload: {
