@@ -38,6 +38,13 @@ export const addAddress = (payload) => {
       const res = await axios.post("/user/address/create", { payload });
       if (res.status === 201) {
         console.log(res);
+        const {
+          address: { address },
+        } = res.data;
+        dispatch({
+          type: userConstants.ADD_USER_ADDRESS_SUCCESS,
+          payload: { address },
+        });
       } else {
         const { error } = res.data;
         dispatch({
